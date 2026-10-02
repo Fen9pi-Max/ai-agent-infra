@@ -1,0 +1,356 @@
+# glossary extractor：全书关键概念
+
+> 来源：《AI Agent 手册》（阿里云，2026-09）。所有 author_definition 均为书中原文（已 grep 核验），
+> 出处括注章节号。本词典作为所有下游 skill 的共享术语基线。
+
+```yaml
+- id: g-01
+  term: Harness
+  type: term
+  source_chapter: 第 3 章（3.1）
+  author_definition: |
+    "广义 Harness 一词，指模型之外用于组织、约束并承载模型驱动任务执行的全部工程系统，
+    其中包含 Runtime、Sandbox、Observability 与 Governance。"（3.1.1）
+  key_distinction: |
+    ≠ "Agent 框架/开发库"（LangChain 语境）——本书把 Harness 当作与 Model 对等的一等架构对象，
+      Agent = Model + Harness 是全书的第一个公式。
+    ≠ 只指编排层——书中区分两个粒度：广义 Harness（模型之外的一切）与 Harness 编排层
+      （持有任务语义的子域：决定模型看到什么、能调用什么、何时停止、结果如何验收），
+      Runtime/Sandbox/Gateway/Observability 是在广义 Harness 内部与编排层并列的责任划分，不是被排除在外。
+  why_it_matters: |
+    全书中心词（出现 450+ 次）。skill 若把 Harness 当"框架"用，会把"选框架"与"设计 Harness
+    责任边界"混为一谈；调优归因次序（先环境→再 Harness→后模型）也依赖此词的准确含义。
+  tags: [term, core-concept]
+
+- id: g-02
+  term: Agentic Application
+  type: term
+  source_chapter: 第 1 章（1.3）
+  author_definition: |
+    "Agentic Application 是 Agent 在应用形态层的完整表达：它以 Model 与 Harness 共同构成的执行主体为核心，
+    与业务逻辑、数据、工具、环境和用户交相结合，能够围绕业务目标维护上下文与状态、动态规划步骤、
+    采取行动，并在确定性边界内交付可验证的任务结果。"（1.3）
+  key_distinction: |
+    ≠ Chatbot/Copilot（人作判断、模型提建议）——由智能承担一个环节、一个岗位乃至一段完整业务流程，
+      人只在关键处授权、审阅与兜底。
+    ≠ 所有应用的升级终点——Workflow 与 Agent 长期共存，"演进"指 AI Native → Agent Native
+      （从"被 AI 增强的应用"到"由 Agent 围绕目标动态组织起来的应用"），判据是任务确定性与容错空间，非技术新旧。
+  why_it_matters: |
+    形态选型类 skill 的判定基准。误当"高级聊天应用"会跳过任务契约与完成验证设计；
+    误当"必经升级阶段"会导致给确定性流程硬上自主 Agent 的过度设计。
+  tags: [term, core-concept]
+
+- id: g-03
+  term: Managed Agent
+  type: term
+  source_chapter: 第 3 章（3.4）
+  author_definition: |
+    "Managed Agents 将约定范围内的 Harness 与运行基础服务化"（构建篇导读）；
+    "Managed Agents 的开发重点是把责任边界写成机器可执行契约：Agent 能看见什么工具，
+    Environment 能访问什么资源，凭证以谁的身份发放，哪些事件需要人工参与，
+    什么 Outcome 才能使企业 Task 完成。"（3.4）
+  key_distinction: |
+    ≠ "托管部署"（只转移基础设施运维）——含运行责任向服务方的转移，边界以机器可执行契约表达。
+    ≠ 更高级的构建入口——它只是四类入口之一，"四类入口不构成成熟度阶梯，也不互斥"。
+  why_it_matters: |
+    构建入口选型 skill 必须区分"部署在哪"与"责任归谁"两件事；把 Managed Agent 当纯部署方案
+    会漏掉责任边界契约这一开发重点。
+  tags: [term]
+
+- id: g-04
+  term: Agent Platform
+  type: term
+  source_chapter: 第 3 章（3.6）
+  author_definition: |
+    "当多团队、多来源 Agent 同时存在时，Agent Platform 负责统一创建、接入、规模化交付、运行、治理、
+    协作、观测与优化，它不是第五类入口。"（构建篇导读）；
+    "Agent Platform 应统一公共对象和接入契约，而不是抹平 Harness 实现差异。"（3.6）
+  key_distinction: |
+    ≠ 第五类构建入口、≠ 更大的框架——是多源 Agent（高代码框架/Coding Agent SDK/Managed Agents/
+      远程端点）的纳管与规模化交付层。
+    平台通过 Task、Session、Event、Identity、State、Checkpoint、Artifact、Trace 等公共对象连接各来源，
+      但各来源保留自己的 Loop、Context、工具执行和状态方式。
+  why_it_matters: |
+    平台化类 skill 的边界定义：平台做统一对象与治理，不抹平实现差异、不接管任务语义。
+    把平台当"超级框架"会重蹈框架锁定问题。
+  tags: [term]
+
+- id: g-05
+  term: 最低充分架构
+  type: term
+  source_chapter: 第 1 章（1.4）
+  author_definition: |
+    "企业应当结合任务价值、风险、运行规模和工程成本，为每类任务选择成本与风险可接受的最低充分架构。
+    这是贯穿本章的决策原则。"（1.4）
+  key_distinction: |
+    ≠ "最简架构/能跑就行"——"充分"的判据是自主性能否与任务风险相匹配；
+    反"越智能越好、越自主越先进"。升级仅在"当前架构无法以可接受的风险和成本交付任务，
+      而新增能力具有明确价值"时才必要。
+  why_it_matters: |
+    所有选型/立项类 skill 的总决策原则，同时防止过度设计（给低风险任务上全自主）
+    与能力不足（给高风险流程放自流）两个方向的错误。
+  tags: [term, core-concept, decision-principle]
+
+- id: g-06
+  term: Agent Loop
+  type: term
+  source_chapter: 第 4 章（4.1）
+  author_definition: |
+    "Agent Loop 以 Prepare、Model、Act、Observe、Verify 推进，显式状态与多维预算提供确定性边界，
+    完成由环境证据判定而非由模型停止判定。"（构建篇导读）
+  key_distinction: |
+    ≠ 单轮 LLM 调用或简单重试循环——是显式状态机 + 多维预算的确定性推进结构。
+    完成语义的核心差异：由环境证据（测试通过、文件差异、业务校验）判定完成，
+      而非模型自行声明"我认为完成了"。
+  why_it_matters: |
+    任务契约类 skill 的核心机制。若沿用"模型输出结束即任务完成"的常识用法，
+    整个完成验证（4.6）设计失效，也会导致异步任务把"进程结束"当"任务完成"（第 10 章）。
+  tags: [term, core-concept]
+
+- id: g-07
+  term: Context 与 State
+  type: term
+  source_chapter: 第 5 章（5.1–5.3）
+  author_definition: |
+    "任何会影响后续行动的事实，都应先进入权威状态，再允许从活动上下文中移除。典型包括审批、
+    工具提交结果、Plan 状态、Artifact、外部对象 ID、预算消耗和用户变更。否则一次不准确的摘要
+    就可能改变任务真实状态。"（5.2）
+  key_distinction: |
+    Context = 模型此刻看见什么（视图，可压缩、可卸载、可重建）；State = 权威任务事实（恢复依据）。
+    常识错误：把不完整对话历史/摘要当作可恢复的任务事实——第 30 章将"上下文与状态的边界被侵蚀"
+      列为六类跨章节约束之一（约束四）。
+    配套三分（5.3）：Session 表达交互连续性、Task 表达可验收目标、Workspace 承载模型窗口之外的
+      工作记忆——三者不可混用，SessionID 不能证明多条记录属于同一任务。
+  why_it_matters: |
+    信息契约与压缩/续行类 skill 的红线：压缩可以丢细节，不能丢事实；
+    状态存储分层选型（task-05）以 Session/Task State/Workspace 三分对象模型为前提。
+  tags: [term, core-concept]
+
+- id: g-08
+  term: 能力发现与执行授权
+  type: term
+  source_chapter: 第 30 章（30.1）＋第 6、9 章
+  author_definition: |
+    "模型知道某个工具存在，与模型有权执行该操作，是两件必须分别设计的事。"（30.1 五项结论之三）
+  key_distinction: |
+    ≠ "接入即可用"——协议兼容不等于授权正确。第 30 章把"用协议兼容代替权限设计，
+      把'能发现'当成'可执行'"列为破坏解耦的典型做法。
+    MCP 只解决工具发现与调用协议，权限仍需由客户端、服务端与宿主系统分别实施。
+  why_it_matters: |
+    行动契约与 MCP/网关治理类 skill 的第一设计原则。Registry/发现类能力若与授权混同设计，
+    会产生"Agent 能看见就能调"的越权路径。
+  tags: [term, core-concept]
+
+- id: g-09
+  term: Trajectory（轨迹）
+  type: term
+  source_chapter: 第 19 章（19.6）
+  author_definition: |
+    "Trajectory：整理后的用户与 Agent 步骤、工具交换、结果和指标"，"适合阅读行为过程、分析和加工样本"；
+    对比：Trace 是"由追踪上下文关联的一组调用"，Session 是"应用关联的一段连续交互，可能包含多条 Trace"。（19.6 对比表）
+  key_distinction: |
+    Trace = 原始调用追踪（定位某次执行与调用问题）≠ Session（交互段，不等于任务）
+    ≠ Trajectory = 整理提取行为主干后面向分析的行为材料。
+    仍非完整事实："仍需核对当前记录覆盖哪些任务部分"；轨迹只记录"发生了什么"，
+      重新实验还需要题目、运行入口、环境和评分标准。
+  why_it_matters: |
+    调优类 skill 的数据起点（task-19）。把 Trace 当 Trajectory 用会让样本不可读、不可复用；
+    把 Trajectory 当完整任务事实会得出错误归因（19.6 标题即"避免把记录范围当成任务结论"）。
+  tags: [term, core-concept]
+
+- id: g-10
+  term: 黄金数据集
+  type: term
+  source_chapter: 第 21 章（21.1）
+  author_definition: |
+    "黄金数据集是一组经过业务确认的任务：既有题目，也有判断任务是否完成的依据。
+    对知识问答，依据可以是参考答案和必须覆盖的要点；对退款、订票等操作任务，
+    还要说明业务应达到的状态；对代码任务，则可以包含测试要求和验收条件。"（21.1）
+  key_distinction: |
+    ≠ 题库/回归测试集——差异在"判据"：每条任务带可判定的完成标准（业务应达到的状态/测试要求），
+      且必须经业务确认，不是工程师自造的样例。
+  why_it_matters: |
+    评估基线资产（task-21）。"任何 Agent Release 都需可复现的评估结果作为发布依据"（30.1 结论五）
+    中的"可复现"就落在黄金集上；无判据的数据集撑不起发布门禁。
+  tags: [term, core-concept]
+
+- id: g-11
+  term: Badcase
+  type: term
+  source_chapter: 第 22 章
+  author_definition: |
+    数据飞轮中"用持续评估与实验发现并验证 Badcase"（调优篇导读）；第 22 章操作路径：
+    "从结果里选出值得修复的 Badcase"→"把确认的问题配成实验，评估这次新生成的答案"→
+    "查看同一道题的前后差异，决定是否采用候选"。
+  key_distinction: |
+    ≠ 泛指失败案例/用户投诉——是经评估器产出、人工筛选确认、配成实验、以同一道题的前后差异
+    为采用依据的问题样本。没有实验对照的"见错就改"不构成 Badcase 修复。
+  why_it_matters: |
+    持续改进主力抓手（task-22）。skill 中若把 Badcase 当普通 bug 记录处理，
+    会跳过评估器与实验环节，无法证明改动有效，也无法防回归。
+  tags: [term]
+
+- id: g-12
+  term: 数据飞轮
+  type: term
+  source_chapter: 第 18 章（18.2）
+  author_definition: |
+    "它把一次执行留下的事实整理成可复用样本，用评估找出问题，用实验检验修改，
+    再把有效变更带回 Agent 的运行环境。过程中留下的轨迹、样本、评分规则、失败模式和版本记录，
+    也可以被下一轮工作继续使用。"（18.2）
+  key_distinction: |
+    ≠ "数据积累越多模型越准"的泛指——是一条固定闭环：Trace→Trajectory→声明式 Pipeline→
+      黄金数据集→持续评估与实验→Badcase 修复→受控自进化；中间产物（评分规则/失败模式/版本记录）
+      本身是可复用资产。
+    前提是治理篇沉淀的可信事实，起点是一次真实执行而非人工编造。
+  why_it_matters: |
+    Agent 调优主线（第 18–23 章）的组织概念。轨迹/Pipeline/黄金集/Badcase/自进化各环节 skill
+    都以它在飞轮中的位置定位自身，避免环节孤立建设。
+  tags: [term, core-concept]
+
+- id: g-13
+  term: 受控自进化
+  type: term
+  source_chapter: 第 23 章
+  author_definition: |
+    "再通过经验库、Skill、工具与运行机制的优化，把验证有效的方法带回 Agent 的运行环境"（调优篇导读）；
+    "受控自动调优：对已规定范围的变更，由接入流程自动运行检查和实验，满足条件后采用，
+    异常时交给负责人"（23.7）。
+  key_distinction: |
+    ≠ 自动学习/在线自我改进——"受控"是限定词：候选经验须先入经验库、经实验验证、
+      限定变更范围、异常时交回负责人。
+    载体是 Memory/Skill/工具/Workflow 等工程资产，而非直接改模型权重。
+  why_it_matters: |
+    经验资产化 skill（task-23）的安全边界。无受控机制的"自进化"正是第 30 章开放问题七
+    （自进化的变更边界）警示的对象——未经分级准入的自动变更有不可回滚风险。
+  tags: [term]
+
+- id: g-14
+  term: HITL（人在回路）
+  type: term
+  source_chapter: 前言（调研报告）＋第 6 章（6.4）
+  author_definition: |
+    "'人在回路'（Human-in-the-Loop，HITL，指关键步骤必须由人确认后才继续执行）作为
+    Agent 落地生产环境的架构原则，而非仅当作附加的审批开关。"（调研报告）
+  key_distinction: |
+    ≠ 附加的审批开关/客服兜底——是一种架构选择（15% 企业以其为主要架构），
+      与单 Agent/多 Agent 并列为长期共存的三种形态。
+    引入位置是"在真正需要判断的位置"（6.4.2），与 Permission 体系共同设计，不是到处弹窗。
+  why_it_matters: |
+    权限与安全类 skill 中 HITL 的定位词。当口号或开关用会退化成无差别人审，
+    既拖慢任务又给人虚假的安全感。
+  tags: [term]
+
+- id: g-15
+  term: 智以致用
+  type: term
+  source_chapter: 前言
+  author_definition: |
+    "'智'是可以被规模化生产的认知能力，'用'是能够被可靠交付的任务结果，
+    而中间这个'以'，正是这本白皮书要讨论的实践命题。"（前言）
+  key_distinction: |
+    ≠ 一般成语式口号——本书用它锚定两级跃迁："从会回答问题到能完成任务"、
+      "从能演示完成任务到能稳定完成任务"（Demo 验证模型能力，生产检验确定性）。
+    "用"的判定标准是可靠交付的任务结果，不是内容生成质量、不是 Demo 演示效果。
+  why_it_matters: |
+    全书总纲与基调。skill 在定位/引言（A0 段）引用时，必须按"用 = 可靠交付的任务结果"
+    的口径使用，避免滑向"生成质量"或"演示效果"的常识语义。
+  tags: [term, book-motto]
+
+- id: g-16
+  term: Agentic OS
+  type: term
+  source_chapter: 第 30 章（30.2）
+  author_definition: |
+    "Agentic OS 是为 Agent 任务提供公共运行对象、公共能力接入、可强制边界与统一证据的系统层。
+    它以任务、环境、能力、授权与证据为核心管理对象，不持有任务语义。"（30.2.2 窄定义）
+  key_distinction: |
+    三条否定与定义同样重要：不替代 Harness（任务语义留在应用侧）；不等于又一个 Agent 框架
+      （系统层的约束应在被约束方不配合时仍然成立）；不必然修改内核（能力放哪层取决于强制性与成本，
+      不取决于层次高低）。
+    ≠ 一款操作系统产品——是"应用之下、被所有 Agent 共享的系统层"这一问题域的命名
+      （"把它称作操作系统，指的是职责归属，不是实现层次"）。
+  why_it_matters: |
+    第 30 章总概念。skill 引用它时应作为前瞻问题域（六类跨章节约束的收束），
+    不可当作可采购产品或既有标准向用户推荐。
+  tags: [term, forward-looking]
+
+- id: g-17
+  term: Run（任务运行）
+  type: term
+  source_chapter: 第 30 章（30.3）
+  author_definition: |
+    "Run（任务运行）：一次有目标、可暂停、可恢复的执行"，生命周期"分钟到数天"；
+    "Run 与进程不是同一层次的对象。一个 Run 可能跨越多个进程、多个副本、多个区域，
+    也可能在中途长时间挂起等待人工审批。它的正确性依据不是'进程是否存活'，
+    而是'任务事实是否完整且一致'。"（30.3.1）
+  key_distinction: |
+    ≠ 进程/请求/会话——"一个 Agent 任务的生命周期长于一次请求、宽于一个进程"（30.1 结论二）；
+    Run 的身份必须独立于承载它的执行实例（这正是状态必须外置的原因）；与 Session 交叉但不等价。
+  why_it_matters: |
+    任务模型与异步续行 skill 的核心对象（开放问题一：Run 应落在哪一层）。
+    把 Run 当进程是"把进程结束当任务完成"、跨副本无法恢复等一系列错误的根源。
+  tags: [term]
+
+- id: g-18
+  term: Budget Lease（预算租约）
+  type: term
+  source_chapter: 第 30 章（30.3）
+  author_definition: |
+    "Budget Lease（预算租约）：有上限、有期限、可收回的资源与调用额度"，随 Run 派生、可级联撤销；
+    "一次授权同时限定可用资源、可执行操作、有效期限与撤销方式，并可随子任务派生"，
+    "本书认为最容易被忽略、但对可控自治最关键的对象。"（30.3.1）
+  key_distinction: |
+    ≠ 配额（cgroup 限额）与权限两件分离配置的事——租约把资源上限、操作范围、期限、撤销方式
+      合并为一次授权，并可随子任务/子 Agent 派生与级联收回。
+    解决的失效模式：身份、权限收回与执行中止分散在多处时，"任务已终止"与"该任务的凭证已失效"
+      并不总是同时成立（约束五）。
+  why_it_matters: |
+    自治控制类 skill 的关键机制。纳管子 Agent 与后台调用时缺少租约模型，
+    授权无法随任务派生与收回，L3 以上自治缺少工程依据。
+  tags: [term]
+
+- id: g-19
+  term: 强制边界与观测边界
+  type: term
+  source_chapter: 第 30 章（30.6）
+  author_definition: |
+    "一项边界只有在满足下列全部条件时，才能称为强制边界：覆盖任务入口、凭证获取、网络与 DNS 访问、
+    文件与进程间通信、子进程创建、原生工具调用、后台任务与子 Agent、以及交互控制台等全部可用路径；
+    在判定组件不可用时采取失败即拒绝（fail-closed）的行为；并且通过负向测试证明绕过尝试确实被拒绝。
+    任何一条不满足，该边界只能称为观测边界，即能够发现越界行为，但不能阻止它。"（30.6.2）
+  key_distinction: |
+    ≠ "能观测到 = 能控制住"。配套推论："'只读接入'是一个需要证明的结论，而不是一个可以声明的属性"
+      ——未通过"写路径不可达"的负向测试时，准确表述只能是"未观察到写操作"。
+    "是否受控"不能按产品整体回答，只能按能力、路径与证据分别回答
+      （同一产品的 eBPF 观测属"仅观测"，hook 策略属"包装器中介"）。
+  why_it_matters: |
+    平台纳管与安全类 skill 的表述纪律。把观测边界宣传为强制边界是产品文案最常见的夸大；
+    接入外部 Agent 时须按"外部边界强制/包装器中介/仅观测/不支持"四类如实标注。
+  tags: [term, core-concept]
+
+- id: g-20
+  term: 自主性（自治阶梯）
+  type: term
+  source_chapter: 第 30 章（30.6）
+  author_definition: |
+    自治阶梯 L1 建议 → L2 单步获准执行 → L3 有界自主 → L4 长任务自主 → L5 组织级自治；
+    "自治程度的上限不由模型能力决定，而由可撤销范围与可证明范围决定。当一项操作既不能撤销，
+    也不能证明其结果，那么无论模型多可靠，把它交给自主执行都缺少工程依据。"（30.6.1）
+  key_distinction: |
+    ≠ "越自主越先进"的成熟度爬升——阶梯的作用"不是鼓励尽快向上走，而是明确每一级必须同时具备的
+      边界与证据"（如 L3 需预算租约，L4 需可级联撤销授权与计划/已发出/已确认三态区分）。
+    配套判断："自主度是一个可调参数，混合形态会长期存在"（调研报告），
+      单/多 Agent/HITL 是共存选择而非新旧替代。
+  why_it_matters: |
+    权限与授权设计类 skill 的定级依据（task-06）：决定"什么操作可以交给哪一级自主执行"，
+    与最低充分架构（g-05）互为表里——一个管形态选择，一个管自主程度上限。
+  tags: [term, core-concept]
+```
+
+## 自检清单
+
+- [x] author_definition 全部取自书中原文（grep 核验：3.1.1、1.3、3.4、3.6、1.4、构建篇导读、5.2、30.1、19.6 对比表、21.1、18.2、23.7、6.4/调研报告、前言、30.2.2、30.3.1、30.6.1、30.6.2）
+- [x] 每条 key_distinction 写明与常识用法的差异（≠/= 结构）
+- [x] 每条 why_it_matters 说明下游 skill 为何需要此澄清
+- [x] 20 条，未凑数；高频词表中的 网关/沙箱/记忆/编排/幂等/Checkpoint/本体/委派 等已由对应章节 extractor 覆盖或属一般工程词汇，未重复收入

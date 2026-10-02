@@ -1,0 +1,102 @@
+{
+  "skill": "ai-agent-infra",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "should-trigger-01",
+      "type": "should_trigger",
+      "prompt": "我们老板要求把所有客服工单都交给自主 Agent 处理，我觉得有些流程还是固定流程更合适，怎么判断哪些该用 Workflow 哪些该用 Agent？",
+      "expected_behavior": "触发技能，加载 arch-selection 卡：四维判形态（任务循环/路径确定性/环境影响/跨会话），Hybrid 为主流，最低充分架构",
+      "expected_card": "arch-selection",
+      "notes": "正面：形态选型"
+    },
+    {
+      "id": "should-trigger-02",
+      "type": "should_trigger",
+      "prompt": "我们的 Agent 经常在多步任务里丢约束，同事说换个更强的模型就行，我怀疑不一定是模型问题，怎么归因？",
+      "expected_behavior": "触发技能，加载 tuning-attribution 卡：先环境→再 Harness→后模型归因次序，四组对照实验；context-engineering 作补读（丢约束双意图）",
+      "expected_card": "tuning-attribution",
+      "notes": "正面：归因判据（双意图，主路由归因）"
+    },
+    {
+      "id": "should-trigger-03",
+      "type": "should_trigger",
+      "prompt": "Agent 上线后质量飘，想建一套评估题库和 Badcase 处理流程，从哪开始？",
+      "expected_behavior": "触发技能，加载 golden-badcase 卡：黄金集四步建集 + 评估器小批试评 + Badcase 四类分流 + 单变量实验",
+      "expected_card": "golden-badcase",
+      "notes": "正面：评估基线"
+    },
+    {
+      "id": "should-trigger-04",
+      "type": "should_trigger",
+      "prompt": "长会话聊到后面 Agent 忘了早期的关键决定，上下文压缩该怎么做才不丢事实？",
+      "expected_behavior": "触发技能，加载 context-engineering 卡：关键事实先落权威状态再移出，压缩保八类信息，Commit-Compact-Rebuild-Validate",
+      "expected_card": "context-engineering",
+      "notes": "正面：上下文压缩"
+    },
+    {
+      "id": "should-trigger-05",
+      "type": "should_trigger",
+      "prompt": "公司有十几个 Agent 各自直连模型和 MCP 工具，想统一收口治理，网关该管什么？",
+      "expected_behavior": "触发技能，加载 ai-gateway 卡：LLM/MCP/Agent 三语义分工，错误分类先于重试，预算跨层原子扣减，MCP 准入四步",
+      "expected_card": "ai-gateway",
+      "notes": "正面：网关治理"
+    },
+    {
+      "id": "should-trigger-06",
+      "type": "should_trigger",
+      "prompt": "Agent 要接入内部 CRM 和外部供应商 API，安全上要防什么？",
+      "expected_behavior": "触发技能，加载 agent-security 卡：盾与缰绳双主线，五攻击面威胁建模，身份八环节与出站默认拒绝",
+      "expected_card": "agent-security",
+      "notes": "正面：安全防护"
+    },
+    {
+      "id": "should-trigger-07",
+      "type": "should_trigger",
+      "prompt": "我们的 Agent 在东南亚用户延迟很高但杭州 Region 内指标正常，怎么优化？",
+      "expected_behavior": "触发技能，加载 edge-optimization 卡：就地三条件分类请求，语义缓存边界与缓存键设计，边缘评估四维指标",
+      "expected_card": "edge-optimization",
+      "notes": "正面：边缘优化"
+    },
+    {
+      "id": "should-not-trigger-01",
+      "type": "should_not_trigger",
+      "prompt": "帮我用 PyTorch 从零实现一个 MoE 模型的训练循环",
+      "expected_behavior": "不触发（不适用条款：模型结构与训练算法本身的研究细节）",
+      "expected_card": null,
+      "notes": "诱饵：模型算法研究"
+    },
+    {
+      "id": "should-not-trigger-02",
+      "type": "should_not_trigger",
+      "prompt": "阿里云百炼控制台里怎么开通 Agent 应用并配置白名单？",
+      "expected_behavior": "不触发（不适用条款：具体云产品控制台操作步骤）",
+      "expected_card": null,
+      "notes": "诱饵：产品控制台操作（近邻负例，考验与 harness-entry 选型信号的区分）"
+    },
+    {
+      "id": "should-not-trigger-03",
+      "type": "should_not_trigger",
+      "prompt": "推荐几个提升我个人效率的 AI 聊天工具",
+      "expected_behavior": "不触发（不适用条款：个人提效/单次对话式 AI 使用）",
+      "expected_card": null,
+      "notes": "诱饵：个人使用"
+    },
+    {
+      "id": "task-01",
+      "type": "representative_task",
+      "prompt": "设计一个每日数据报表生成 Agent：凌晨触发、读数仓、生成报表、发邮件，失败要可恢复",
+      "expected_behavior": "加载 task-contract 卡，按 E 段产出：环境证据完成判据、九态状态机+预算表（含高风险动作计数）、机判门禁、七要素委派契约、失败→恢复映射",
+      "expected_card": "task-contract",
+      "notes": "代表任务：输入缺成功标准应被输入契约拦截并先确认"
+    },
+    {
+      "id": "task-02",
+      "type": "representative_task",
+      "prompt": "退款审批 Agent 在 30% 的任务中跳过风控校验步骤，怎么排查和修复？",
+      "expected_behavior": "加载 tuning-attribution 卡，按 E 段产出：三层归因假设+判定条件、E1/E2/E3 验证实验、四组对照表、判停应用（归因到环境/Harness 则不进训练）",
+      "expected_card": "tuning-attribution",
+      "notes": "代表任务：缺轨迹记录应被输入契约拦截并降为假设级归因"
+    }
+  ]
+}
