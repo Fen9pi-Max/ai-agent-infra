@@ -1,7 +1,7 @@
 # AI Agent 手册 — 精华 (DIGEST)
 
 > 本文由 cangjie-skill 蒸馏生成，只呈现**通过三重验证**的方法论 — 不是全书摘要，是筛过水分的精华。
-> 想深入某个方法论时，点小节末尾的卡片链接；想看全貌，读 [capability-index](.cangjie/capabilities/)。
+> 想深入某个方法论时，点小节末尾的卡片链接；想看全貌，读 [capability-index](../references/capabilities/)。
 > 作者: 阿里云（github.com/aliyun/ai-agent-handbook 开源社区） | 2026-09 | 22 个能力
 
 ## 这本书在讲什么
@@ -24,14 +24,14 @@
 **核心逻辑**：应用形态不是线性替代链。用四个维度判断：任务循环由谁掌握、执行路径何时确定、对外部环境的影响程度、是否需要跨会话持续或多人协作。企业主流形态是 Workflow 与 Agent 的 Hybrid。成熟度 L1-L4 不由产品名称决定，判据是自主性能否与任务风险相匹配。
 **书中用法**：2026 调研显示 Agent 优先落地的是容错空间大、能人工兜底的场景，进入核心业务流程的不到 40%——"最低充分架构"不是保守，是风险定价。
 **失效边界**：给确定性流程硬上自主 Agent（过度设计），或给高风险流程放自流（能力不足），两个方向都是错。
-→ 深入： [`arch-selection`](references/capabilities/arch-selection.md)
+→ 深入： [`arch-selection`](../references/capabilities/arch-selection.md)
 
 ### 构建入口选择（harness-entry）
 
 **解决什么问题**：高代码框架、产品化 Harness（Coding Agent SDK）、Managed Agent、云产品——从哪开始建？
 **核心逻辑**：四类入口不构成成熟度阶梯、不互斥，按定制深度、数据边界、运行责任、交付方式四判据选择。先把任务契约（Agent 能看见什么、凭证以谁的身份发、什么 Outcome 算完成）写成机器可执行的东西，再选入口。
 **书中用法**：Kitta 领域定制 Code Review Agent 走高代码路线沉淀 7 万+ 补丁经验；信永中和用 AgentCore+AI 网关一周联调上线——两条路都对，因为任务契约不同。
-→ 深入： [`harness-entry`](references/capabilities/harness-entry.md)
+→ 深入： [`harness-entry`](../references/capabilities/harness-entry.md)
 
 ---
 
@@ -44,19 +44,19 @@
 **核心逻辑**：Agent Loop 以 Prepare→Model→Act→Observe→Verify 推进，配十状态任务状态机与多维预算。**模型只能申请完成，Harness 依据环境证据提交完成**。子任务委派走七要素契约，主 Agent 不交出完成责任。
 **书中用法**：PatchPilot 把内核补丁交付做成可编排、可验证的工程闭环——每个阶段有证据门禁，而非"模型说改完了"。
 **失效边界**：把进程结束当任务完成；Prompt 约束不等于 Harness 约束。
-→ 深入： [`task-contract`](references/capabilities/task-contract.md)
+→ 深入： [`task-contract`](../references/capabilities/task-contract.md)
 
 ### 信息契约（context-engineering / state-layering / skill-asset）
 
 **核心逻辑**：Context 不是仓库里的长字符串，而是每次调用动态编译的产物——权限过滤先于相关性排序，Token 分区预算，Manifest 可审计。**任何影响后续行动的事实，先落权威状态，再允许移出上下文**；压缩保八类信息，大结果卸载留引用。Call/Session/Task 三分；Memory/Knowledge 分库治理；稳定的方法沉淀为受版本管理的 Skill，渐进式披露。
 **书中用法**：MiniMax 海量长周期记忆底座（性能 +3 倍、存储成本 -75%）；调研显示 90% 企业明确需要上下文与记忆管理，而痛点不是窗口大小，是检索不准（54%）与遗忘机制缺失（48%）。
-→ 深入： [`context-engineering`](references/capabilities/context-engineering.md) ｜ [`state-layering`](references/capabilities/state-layering.md) ｜ [`skill-asset`](references/capabilities/skill-asset.md)
+→ 深入： [`context-engineering`](../references/capabilities/context-engineering.md) ｜ [`state-layering`](../references/capabilities/state-layering.md) ｜ [`skill-asset`](../references/capabilities/skill-asset.md)
 
 ### 行动契约（action-plane）
 
 **核心逻辑**：行动链七步（Schema→身份→Policy→审批→执行→Observation→Trace），看见/注册/授权三分——**知道工具存在 ≠ 有权执行**。权限决策要素化为 ALLOW/DENY/ASK，高影响操作走 Preview—Approve—Commit—Verify，副作用行动重试前必须先证明未发生。
 **书中用法**：GOAI 大赛作品 RevGuard 渠道佣金核算：金额不由模型产生，规则引擎精算+审批令牌——行动契约的教科书式应用。
-→ 深入： [`action-plane`](references/capabilities/action-plane.md)
+→ 深入： [`action-plane`](../references/capabilities/action-plane.md)
 
 ---
 
@@ -66,13 +66,13 @@
 
 **核心逻辑**：沙箱按负载交付环境契约（模板/挂载/保留/验收/释放），隔离后端按可信度与租户边界选；状态先定正确性边界再选承载——Event Log 只追加、Checkpoint 七要素、Durable Execution=最新快照+增量回放+执行租约；AI 网关收敛为三种治理语义（LLM/MCP/Agent），错误分类先于重试、预算跨层原子扣减、MCP 准入四步（认证—协议校验—授权—转发）。
 **书中用法**：畅捷通四阶段演进把故障定位从 10 分钟压到 30 秒，靠的是状态外置+可观测先行；调研中多模型路由与自动降级是比例最高的单项网关需求（63%）。
-→ 深入： [`runtime-sandbox`](references/capabilities/runtime-sandbox.md) ｜ [`state-storage`](references/capabilities/state-storage.md) ｜ [`ai-gateway`](references/capabilities/ai-gateway.md)
+→ 深入： [`runtime-sandbox`](../references/capabilities/runtime-sandbox.md) ｜ [`state-storage`](../references/capabilities/state-storage.md) ｜ [`ai-gateway`](../references/capabilities/ai-gateway.md)
 
 ### 运行的秩序（async-completion / multi-agent-org / agent-comm）
 
 **核心逻辑**：异步任务的完成语义分五层（执行状态→运维状态→候选证据→Evidence→Outcome），恢复与幂等是执行端责任；多 Agent 先过收益成本判断再组队，三拓扑（主管—执行/对等/分层）按决策与汇报关系选，根 Task 前定团队级停止条件；通信按四面（人机/能力/协作/内构）×四档交互语义逐段选型——**流结束 ≠ 任务结束**。
 **书中用法**：多 Agent 研发小队（AgentTeam+AgentLoop）从写代码走到端到端交付；调研显示多 Agent 最大痛点是状态与上下文衰减（60%）。
-→ 深入： [`async-completion`](references/capabilities/async-completion.md) ｜ [`multi-agent-org`](references/capabilities/multi-agent-org.md) ｜ [`agent-comm`](references/capabilities/agent-comm.md)
+→ 深入： [`async-completion`](../references/capabilities/async-completion.md) ｜ [`multi-agent-org`](../references/capabilities/multi-agent-org.md) ｜ [`agent-comm`](../references/capabilities/agent-comm.md)
 
 ---
 
@@ -86,7 +86,7 @@
 - **上线前仿真（agent-simulation）**：在授权与后果两判据内，用用户模拟+环境模拟反复演练，零违规结论按 3/n 置信上界表述。
 
 **书中用法**：Agentic SOC 用 SOCBench 211 任务基线评测驱动安全产品研发；调研中轨迹自动评估仅占 6%，但有评估体系的企业任务成功率约为无评估企业的两倍——治理就是生产力的定量证据。
-→ 深入： [`observability`](references/capabilities/observability.md) ｜ [`agent-security`](references/capabilities/agent-security.md) ｜ [`asset-governance`](references/capabilities/asset-governance.md) ｜ [`agent-simulation`](references/capabilities/agent-simulation.md)
+→ 深入： [`observability`](../references/capabilities/observability.md) ｜ [`agent-security`](../references/capabilities/agent-security.md) ｜ [`asset-governance`](../references/capabilities/asset-governance.md) ｜ [`agent-simulation`](../references/capabilities/agent-simulation.md)
 
 ---
 
@@ -96,13 +96,13 @@
 
 **核心逻辑**：全书防最贵误判的能力。归因次序：**先排除能够独立复现的执行环境故障→再检查 Harness 是否提供了充分信息与可靠控制→最后才判断是否属于模型能力缺口**。归因到模型后，按可示范/可验证反馈/教师领先选 SFT、Agentic RL 或蒸馏，训练前后同口径复测，五门禁灰度上线。
 **书中用法**："把本应由上下文、工具协议或运行控制解决的问题当成模型不行，往往是代价最高的一类误判"——17 章开篇即立此判据。
-→ 深入： [`tuning-attribution`](references/capabilities/tuning-attribution.md)
+→ 深入： [`tuning-attribution`](../references/capabilities/tuning-attribution.md)
 
 ### 数据飞轮四环（trajectory-pipeline / golden-badcase / controlled-evolution / edge-optimization）
 
 **核心逻辑**：把 Trace 组织成可复用的 Trajectory（带目标、步骤、结果、判据），经声明式 Pipeline 加工成业务样本，沉淀为带判据的黄金数据集，用持续评估与单变量实验发现并验证 Badcase，验证有效的经验受控转化为 Memory/Skill/工具/运行机制。边缘优化作为独立专题：就地三条件分类请求、缓存键六维防串租户、"不优化"也是正确选项。
 **书中用法**：Mamba Insight 从 500+ 需求标注出 9 个 Skill + 45 组 QA 对资产；塔斯汀用 AI 反馈三元组驱动数字员工矩阵迭代。
-→ 深入： [`trajectory-pipeline`](references/capabilities/trajectory-pipeline.md) ｜ [`golden-badcase`](references/capabilities/golden-badcase.md) ｜ [`controlled-evolution`](references/capabilities/controlled-evolution.md) ｜ [`edge-optimization`](references/capabilities/edge-optimization.md)
+→ 深入： [`trajectory-pipeline`](../references/capabilities/trajectory-pipeline.md) ｜ [`golden-badcase`](../references/capabilities/golden-badcase.md) ｜ [`controlled-evolution`](../references/capabilities/controlled-evolution.md) ｜ [`edge-optimization`](../references/capabilities/edge-optimization.md)
 
 ---
 
